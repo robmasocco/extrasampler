@@ -21,3 +21,19 @@
  * this file; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
+
+/**
+ * @brief An extrasampler requires a specific numeric type used to represent
+ *        samples and other floating-point data. Meant for public inheritance.
+ */
+template <typename NumericType>
+class Extrasampler
+{
+public:
+    virtual NumericType get_sample(NumericType time) = 0;
+    virtual void update_samples(NumericType time, NumericType new_sample) = 0;
+    virtual void reset(void) = 0;
+
+protected:
+    unsigned int samples_rcvd_;
+};
