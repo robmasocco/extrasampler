@@ -25,27 +25,33 @@
 #ifndef QUAD_FTIME_EXTRASAMPLER_H
 #define QUAD_FTIME_EXTRASAMPLER_H
 
-class Extrapolator
+#include "extrasampler.hpp"
+
+/**
+ * @brief Extends extrasampler's base adding quadratic extrapolation methods,
+ *        assuming constant original sampling time "tau".
+ */
+template <typename NumericType>
+class QuadFixTimeExtrasampler : public Extrasampler<NumericType>
 {
-private:
-    double tau;
-    double Ss0;
-    double Ss1;
-    double lastabsT;
-
-    double invTMtx[3][3];
-
-    double samplerecvd = 0;
-
-    double a;
-    double b;
-    double c;
-
 public:
-    Extrapolator(double T);
-    double get(double T);
-    void updateSample(double T, double S);
+    QuadFixTimeExtrasampler(NumericType tau);
+    NumericType get_sample(NumericType time);
+    void update_samples(NumericType new_time, NumericType new_sample);
     void reset(void);
+    NumericType get_tau(void);
+
+private:
+    NumericType tau_;
+    NumericType sample_0_;
+    NumericType sample_1_;
+    NumericType last_abs_time_;
+
+    NumericType inv_tau_mat_[3][3];
+
+    NumericType a_;
+    NumericType b_;
+    NumericType c_;
 };
 
 #endif
