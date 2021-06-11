@@ -31,7 +31,7 @@ class Extrasampler
 {
 public:
     virtual NumericType get_sample(NumericType time) = 0;
-    virtual void update_samples(NumericType time, NumericType new_sample) = 0;
+    virtual void update_samples(NumericType new_time, NumericType new_sample) = 0;
     virtual void reset(void) = 0;
 
 protected:

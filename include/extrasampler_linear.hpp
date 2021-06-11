@@ -25,19 +25,25 @@
 #ifndef LINEAR_EXTRASAMPLER_H
 #define LINEAR_EXTRASAMPLER_H
 
-class Extrapolator
+#include "extrasampler.hpp"
+
+/**
+ * @brief Extends extrasampler's base adding linear extrapolation methods.
+ */
+template <typename NumericType>
+class LinearExtrasampler : public Extrasampler<NumericType>
 {
-	private:
-		double prevsample_T;
-		double prevsample_S;
-		double a;
-		double b;
-		
-	public:
-		Extrapolator();
-		Extrapolator(double T, double S);
-		double get(double T);
-		void updateSample(double T, double S);
+public:
+    LinearExtrasampler(NumericType init_time = 0, NumericType init_sample = 0);
+    NumericType get_sample(NumericType time);
+    void update_samples(NumericType new_time, NumericType new_sample);
+    void reset(void);
+
+private:
+    NumericType a_;
+    NumericType b_;
+    NumericType prev_sample_time_;
+    NumericType prev_sample_;
 };
 
 #endif
