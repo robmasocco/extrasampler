@@ -26,6 +26,10 @@
  * @brief An extrasampler requires a specific numeric type used to represent
  *        samples and other floating-point data. Meant for public inheritance.
  */
+
+#ifndef EXTRASAMPLER_H
+#define EXTRASAMPLER_H
+
 template <typename NumericType>
 class Extrasampler
 {
@@ -37,3 +41,5 @@ public:
 protected:
     unsigned int samples_rcvd_;
 };
+
+#endif
