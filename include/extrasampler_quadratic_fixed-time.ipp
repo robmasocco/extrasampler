@@ -42,17 +42,17 @@ QuadFixTimeExtrasampler<NumericType>::QuadFixTimeExtrasampler(NumericType tau)
     tau_ = tau;
     this->reset();
     // Initialize coefficients matrix, computed with given tau.
-    inv_tau_mat_[0][0] = 1 / (2 * tau * tau);
-    inv_tau_mat_[0][1] = -1 / (tau * tau);
-    inv_tau_mat_[0][2] = 1 / (2 * tau * tau);
+    inv_tau_mat_[0][0] = NumericType(1) / (NumericType(2) * tau * tau);
+    inv_tau_mat_[0][1] = NumericType(-1) / (tau * tau);
+    inv_tau_mat_[0][2] = NumericType(1) / (NumericType(2) * tau * tau);
 
-    inv_tau_mat_[1][0] = -5 / (2 * tau);
-    inv_tau_mat_[1][1] = 4 / tau;
-    inv_tau_mat_[1][2] = -3 / (2 * tau);
+    inv_tau_mat_[1][0] = NumericType(-5) / (NumericType(2) * tau);
+    inv_tau_mat_[1][1] = NumericType(4) / tau;
+    inv_tau_mat_[1][2] = NumericType(-3) / (NumericType(2) * tau);
 
-    inv_tau_mat_[2][0] = 3;
-    inv_tau_mat_[2][1] = -3;
-    inv_tau_mat_[2][2] = 1;
+    inv_tau_mat_[2][0] = NumericType(3);
+    inv_tau_mat_[2][1] = NumericType(-3);
+    inv_tau_mat_[2][2] = NumericType(1);
 }
 
 /**
@@ -61,12 +61,12 @@ QuadFixTimeExtrasampler<NumericType>::QuadFixTimeExtrasampler(NumericType tau)
 template <typename NumericType>
 void QuadFixTimeExtrasampler<NumericType>::reset(void)
 {
-    sample_0_ = 0;
-    sample_1_ = 0;
-    a_ = 0;
-    b_ = 0;
-    c_ = 0;
-    last_abs_time_ = 0;
+    sample_0_ = NumericType(0);
+    sample_1_ = NumericType(0);
+    a_ = NumericType(0);
+    b_ = NumericType(0);
+    c_ = NumericType(0);
+    last_abs_time_ = NumericType(0);
     samples_rcvd_ = 0;
 }
 
@@ -81,7 +81,7 @@ NumericType QuadFixTimeExtrasampler<NumericType>::get_sample(NumericType time)
 {
     // The extrapolator requires two samples to be stored.
     if (samples_rcvd_ < 2)
-        return NAN;
+        return NumericType(NAN);
     // Perform a quadratic approximation using relative time from last sample.
     NumericType t = time - last_abs_time_;
     return a_ * t * t + b_ * t + c_;

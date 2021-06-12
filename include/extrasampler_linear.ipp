@@ -75,10 +75,10 @@ void LinearExtrasampler<NumericType>::update_samples(NumericType new_time, Numer
 template <typename NumericType>
 void LinearExtrasampler<NumericType>::reset(void)
 {
-    a_ = 0;
-    b_ = 0;
-    prev_sample_ = 0;
-    prev_sample_time_ = 0;
+    a_ = NumericType(0);
+    b_ = NumericType(0);
+    prev_sample_ = NumericType(0);
+    prev_sample_time_ = NumericType(0);
 }
 
 #endif
