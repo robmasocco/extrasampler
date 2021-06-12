@@ -36,7 +36,7 @@ template <typename NumericType>
 QuadFixTimeExtrasampler<NumericType>::QuadFixTimeExtrasampler(NumericType tau)
 {
     if (tau == (NumericType)0)
-        throw std::invalid_argument;
+        throw std::invalid_argument("Null sampling time.");
     // Set private members.
     tau_ = tau;
     this->reset();
