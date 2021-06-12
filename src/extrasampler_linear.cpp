@@ -1,8 +1,8 @@
 /**
  * @brief Linear extrapolation oversampler source code.
  *
- * @author Roberto Masocco <robmasocco@gmail.com>
  * @author Marco Passeri <mbass.pass@gmail.com>
+ * @author Roberto Masocco <robmasocco@gmail.com>
  *
  * @date June 11, 2021
  */
@@ -24,28 +24,58 @@
 
 #include "../include/extrasampler_linear.hpp"
 
-Extrapolator::Extrapolator()
+/**
+ * @brief Creates a linear extrasampler.
+ *
+ * @param init_time Initial value of the last sample acquisition time.
+ * @param init_sample First available sample.
+ */
+template <typename NumericType>
+LinearExtrasampler<NumericType>::LinearExtrasampler(NumericType init_time, NumericType init_sample)
 {
-	prevsample_T = 0;
-	prevsample_S = 0;
+    // Set private members.
+    prev_sample_time_ = init_time;
+    prev_sample_ = init_sample;
 }
 
-Extrapolator::Extrapolator(double T, double S)
+/**
+ * @brief Returns a new predicted sample extrapolated from available one.
+ *
+ * @param time Time at which to compute the new sample.
+ * @return New extrapolated sample.
+ */
+template <typename NumericType>
+NumericType LinearExtrasampler<NumericType>::get_sample(NumericType time)
 {
-	prevsample_T = T;
-	prevsample_S = S;
+    // Simply apply a linear approximation.
+    return a_ * time + b_;
 }
 
-void Extrapolator::updateSample(double T, double S)
+/**
+ * @brief Updates the last stored true sample.
+ *
+ * @param new_time Acquisition time.
+ * @param new_sample Newly acquired sample.
+ */
+template <typename NumericType>
+void LinearExtrasampler<NumericType>::update_samples(NumericType new_time, NumericType new_sample)
 {
-	a = (S - prevsample_S) / (T - prevsample_T);
-	b = prevsample_S - a * prevsample_T;
-	
-	prevsample_S = S;
-	prevsample_T = T;
+    // Recompute linear approximation coefficients using new data.
+    a_ = (new_sample - prev_sample_) / (new_time - prev_sample_time_);
+    b_ = prev_sample_ - a_ * prev_sample_time_;
+    // Store new values.
+    prev_sample_ = new_sample;
+    prev_sample_time_ = new_time;
 }
 
-double Extrapolator::get(double T)
+/**
+ * @brief Resets the internal state of the extrasampler.
+ */
+template <typename NumericType>
+void LinearExtrasampler<NumericType>::reset(void)
 {
-	return a * T + b;
+    a_ = 0;
+    b_ = 0;
+    prev_sample_ = 0;
+    prev_sample_time_ = 0;
 }

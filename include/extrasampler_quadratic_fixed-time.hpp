@@ -1,8 +1,8 @@
 /**
  * @brief Quadratic fixed-time extrapolation oversampler.
  *
- * @author Roberto Masocco <robmasocco@gmail.com>
  * @author Marco Passeri <mbass.pass@gmail.com>
+ * @author Roberto Masocco <robmasocco@gmail.com>
  *
  * @date June 11, 2021
  */
