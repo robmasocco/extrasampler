@@ -22,8 +22,8 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
-#ifndef QUAD_FTIME_EXTRASAMPLER_H
-#define QUAD_FTIME_EXTRASAMPLER_H
+#ifndef QUAD_FTIME_EXTRASAMPLER_HPP
+#define QUAD_FTIME_EXTRASAMPLER_HPP
 
 #include "extrasampler.hpp"
 
@@ -55,5 +55,7 @@ private:
 
     unsigned int samples_rcvd_;
 };
+
+#include "extrasampler_quadratic_fixed-time.ipp"
 
 #endif

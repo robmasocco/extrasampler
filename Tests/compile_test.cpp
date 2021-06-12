@@ -1,5 +1,5 @@
 /**
- * @brief Small tester to check that compilation works. Compile with all source files.
+ * @brief Small tester to check that compilation works.
  *
  * @author Roberto Masocco <robmasocco@gmail.com>
  *
@@ -14,6 +14,9 @@
 /* The works. */
 int main(void)
 {
+    LinearExtrasampler<double> linear();
+    QuadFixTimeExtrasampler<double> quad(0.1);
     std::cout << "It compiles!" << std::endl;
+    std::cout << "Quad has tau: " << quad.get_tau() << "." << std::endl;
     exit(EXIT_SUCCESS);
 }

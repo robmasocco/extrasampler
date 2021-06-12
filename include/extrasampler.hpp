@@ -27,8 +27,8 @@
  *        samples and other floating-point data. Meant for public inheritance.
  */
 
-#ifndef EXTRASAMPLER_H
-#define EXTRASAMPLER_H
+#ifndef EXTRASAMPLER_HPP
+#define EXTRASAMPLER_HPP
 
 template <typename NumericType>
 class Extrasampler

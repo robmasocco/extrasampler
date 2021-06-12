@@ -22,7 +22,8 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
-#include "../include/extrasampler_linear.hpp"
+#ifndef LINEAR_EXTRASAMPLER_IPP
+#define LINEAR_EXTRASAMPLER_IPP
 
 /**
  * @brief Creates a linear extrasampler.
@@ -79,3 +80,5 @@ void LinearExtrasampler<NumericType>::reset(void)
     prev_sample_ = 0;
     prev_sample_time_ = 0;
 }
+
+#endif

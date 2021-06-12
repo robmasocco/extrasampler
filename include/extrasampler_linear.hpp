@@ -22,8 +22,8 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
-#ifndef LINEAR_EXTRASAMPLER_H
-#define LINEAR_EXTRASAMPLER_H
+#ifndef LINEAR_EXTRASAMPLER_HPP
+#define LINEAR_EXTRASAMPLER_HPP
 
 #include "extrasampler.hpp"
 
@@ -34,7 +34,7 @@ template <typename NumericType>
 class LinearExtrasampler : public Extrasampler<NumericType>
 {
 public:
-    LinearExtrasampler(NumericType init_time = 0, NumericType init_sample = 0);
+    LinearExtrasampler(NumericType init_time = NumericType(), NumericType init_sample = NumericType());
     NumericType get_sample(NumericType time);
     void update_samples(NumericType new_time, NumericType new_sample);
     void reset(void);
@@ -45,5 +45,7 @@ private:
     NumericType prev_sample_time_;
     NumericType prev_sample_;
 };
+
+#include "extrasampler_linear.ipp"
 
 #endif

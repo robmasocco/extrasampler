@@ -22,10 +22,11 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
+#ifndef QUAD_FTIME_EXTRASAMPLER_IPP
+#define QUAD_FTIME_EXTRASAMPLER_IPP
+
 #include <math.h>
 #include <stdexcept>
-
-#include "../include/extrasampler_quadratic_fixed-time.hpp"
 
 /**
  * @brief Creates a quadratic extrasampler, assuming constant sampling time.
@@ -129,3 +130,5 @@ NumericType QuadFixTimeExtrasampler<NumericType>::get_tau(void)
 {
     return tau_;
 }
+
+#endif
