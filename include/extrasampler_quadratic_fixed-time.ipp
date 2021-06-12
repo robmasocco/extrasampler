@@ -67,7 +67,7 @@ void QuadFixTimeExtrasampler<NumericType>::reset(void)
     b_ = NumericType(0);
     c_ = NumericType(0);
     last_abs_time_ = NumericType(0);
-    samples_rcvd_ = 0;
+    this->samples_rcvd_ = 0;
 }
 
 /**
@@ -80,7 +80,7 @@ template <typename NumericType>
 NumericType QuadFixTimeExtrasampler<NumericType>::get_sample(NumericType time)
 {
     // The extrapolator requires two samples to be stored.
-    if (samples_rcvd_ < 2)
+    if (this->samples_rcvd_ < 2)
         return NumericType(NAN);
     // Perform a quadratic approximation using relative time from last sample.
     NumericType t = time - last_abs_time_;
@@ -97,15 +97,15 @@ template <typename NumericType>
 void QuadFixTimeExtrasampler<NumericType>::update_samples(NumericType new_time, NumericType new_sample)
 {
     // Correctly store first two samples.
-    if (samples_rcvd_ == 0)
+    if (this->samples_rcvd_ == 0)
     {
         sample_0_ = new_sample;
-        samples_rcvd_++;
+        this->samples_rcvd_++;
     }
-    else if (samples_rcvd_ == 1)
+    else if (this->samples_rcvd_ == 1)
     {
         sample_1_ = new_sample;
-        samples_rcvd_++;
+        this->samples_rcvd_++;
     }
     else
     {

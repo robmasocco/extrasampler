@@ -52,8 +52,6 @@ private:
     NumericType a_;
     NumericType b_;
     NumericType c_;
-
-    unsigned int samples_rcvd_;
 };
 
 #include "extrasampler_quadratic_fixed-time.ipp"
