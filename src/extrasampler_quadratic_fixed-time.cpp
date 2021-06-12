@@ -23,69 +23,109 @@
  */
 
 #include <math.h>
+#include <stdexcept>
 
 #include "../include/extrasampler_quadratic_fixed-time.hpp"
 
-Extrapolator::Extrapolator(double T)
+/**
+ * @brief Creates a quadratic extrasampler, assuming constant sampling time.
+ *
+ * @param tau Sampling time, must be nonzero.
+ */
+template <typename NumericType>
+QuadFixTimeExtrasampler<NumericType>::QuadFixTimeExtrasampler(NumericType tau)
 {
-    tau = T;
+    if (tau == (NumericType)0)
+        throw std::invalid_argument;
+    // Set private members.
+    tau_ = tau;
     this->reset();
+    // Initialize coefficients matrix, computed with given tau.
+    inv_tau_mat_[0][0] = 1 / (2 * tau * tau);
+    inv_tau_mat_[0][1] = -1 / (tau * tau);
+    inv_tau_mat_[0][2] = 1 / (2 * tau * tau);
 
-    invTMtx[0][0] = 1 / (2 * tau * tau);
-    invTMtx[0][1] = -1 / (tau * tau);
-    invTMtx[0][2] = 1 / (2 * tau * tau);
+    inv_tau_mat_[1][0] = -5 / (2 * tau);
+    inv_tau_mat_[1][1] = 4 / tau;
+    inv_tau_mat_[1][2] = -3 / (2 * tau);
 
-    invTMtx[1][0] = -5 / (2 * tau);
-    invTMtx[1][1] = 4 / tau;
-    invTMtx[1][2] = -3 / (2 * tau);
-
-    invTMtx[2][0] = 3;
-    invTMtx[2][1] = -3;
-    invTMtx[2][2] = 1;
+    inv_tau_mat_[2][0] = 3;
+    inv_tau_mat_[2][1] = -3;
+    inv_tau_mat_[2][2] = 1;
 }
 
-void Extrapolator::reset(void)
+/**
+ * @brief Resets the intenal state of the extrasampler.
+ */
+template <typename NumericType>
+void QuadFixTimeExtrasampler<NumericType>::reset(void)
 {
-    Ss0 = 0;
-    Ss1 = 0;
-
-    samplerecvd = 0;
-
-    a = 0;
-    b = 0;
-    c = 0;
+    sample_0_ = 0;
+    sample_1_ = 0;
+    a_ = 0;
+    b_ = 0;
+    c_ = 0;
+    last_abs_time_ = 0;
+    samples_rcvd_ = 0;
 }
 
-void Extrapolator::updateSample(double T, double S)
+/**
+ * @brief Computes a new predicted sample extrapolated from the stored ones.
+ *
+ * @param time Time at which to compute the new sample.
+ * @return New extrapolated sample.
+ */
+template <typename NumericType>
+NumericType QuadFixTimeExtrasampler<NumericType>::get_sample(NumericType time)
 {
-    if (samplerecvd == 0)
+    // The extrapolator requires two samples to be stored.
+    if (samples_rcvd_ < 2)
+        return NAN;
+    // Perform a quadratic approximation using relative time from last sample.
+    NumericType t = time - last_abs_time_;
+    return a_ * t * t + b_ * t + c_;
+}
+
+/**
+ * @brief Updates stored samples when a new one is acquired.
+ *
+ * @param new_time Time at which the new sample was acquired.
+ * @param new_sample New acquired sample.
+ */
+template <typename NumericType>
+void QuadFixTimeExtrasampler<NumericType>::update_samples(NumericType new_time, NumericType new_sample)
+{
+    // Correctly store first two samples.
+    if (samples_rcvd_ == 0)
     {
-        Ss0 = S;
-        samplerecvd++;
+        sample_0_ = new_sample;
+        samples_rcvd_++;
     }
-    else if (samplerecvd == 1)
+    else if (samples_rcvd_ == 1)
     {
-        Ss1 = S;
-        samplerecvd++;
+        sample_1_ = new_sample;
+        samples_rcvd_++;
     }
     else
     {
-        a = invTMtx[0][0] * Ss0 + invTMtx[0][1] * Ss1 + invTMtx[0][2] * S;
-        b = invTMtx[1][0] * Ss0 + invTMtx[1][1] * Ss1 + invTMtx[1][2] * S;
-        c = invTMtx[2][0] * Ss0 + invTMtx[2][1] * Ss1 + invTMtx[2][2] * S;
-
-        lastabsT = T;
-
-        Ss0 = Ss1;
-        Ss1 = S;
+        // Recompute approximation coefficients using the new sample and the previous ones.
+        a_ = inv_tau_mat_[0][0] * sample_0_ + inv_tau_mat_[0][1] * sample_1_ + inv_tau_mat_[0][2] * new_sample;
+        b_ = inv_tau_mat_[1][0] * sample_0_ + inv_tau_mat_[1][1] * sample_1_ + inv_tau_mat_[1][2] * new_sample;
+        c_ = inv_tau_mat_[2][0] * sample_0_ + inv_tau_mat_[2][1] * sample_1_ + inv_tau_mat_[2][2] * new_sample;
+        // Update stored data.
+        last_abs_time_ = new_time;
+        sample_0_ = sample_1_;
+        sample_1_ = new_sample;
     }
 }
 
-double Extrapolator::get(double T)
+/**
+ * @brief Returns the extrapolator's sampling time.
+ *
+ * @return tau value.
+ */
+template <typename NumericType>
+NumericType QuadFixTimeExtrasampler<NumericType>::get_tau(void)
 {
-    if (samplerecvd < 2)
-        return NAN;
-    double t = T - lastabsT;
-
-    return a * t * t + b * t + c;
+    return tau_;
 }

@@ -39,7 +39,7 @@ LinearExtrasampler<NumericType>::LinearExtrasampler(NumericType init_time, Numer
 }
 
 /**
- * @brief Returns a new predicted sample extrapolated from available one.
+ * @brief Computes a new predicted sample extrapolated from the stored one.
  *
  * @param time Time at which to compute the new sample.
  * @return New extrapolated sample.
