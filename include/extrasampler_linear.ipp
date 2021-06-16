@@ -34,10 +34,9 @@
  * @param init_sample First available sample.
  */
 template <typename NumericType, unsigned int Samples>
-LinearExtrasampler<NumericType, Samples>::LinearExtrasampler(NumericType init_time, NumericType init_sample)
+LinearExtrasampler<NumericType, Samples>::LinearExtrasampler()
 {
     // Set private members.
-    this->samples_rcvd_ = 0;
     this->reset();
 }
 

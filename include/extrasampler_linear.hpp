@@ -34,7 +34,7 @@ template <typename NumericType, unsigned int Samples>
 class LinearExtrasampler : public Extrasampler<NumericType>
 {
 public:
-    LinearExtrasampler(NumericType init_time = NumericType(0), NumericType init_sample = NumericType(0));
+    LinearExtrasampler();
     NumericType get_sample(NumericType time);
     void update_samples(NumericType new_time, NumericType new_sample);
     void reset(void);
