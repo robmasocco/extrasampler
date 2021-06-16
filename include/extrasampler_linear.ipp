@@ -117,6 +117,7 @@ void LinearExtrasampler<NumericType, Samples>::reset(void)
         times_buffer_[i] = NumericType(0);
     }
     new_sample_index_ = 0;
+    this->samples_rcvd_ = 0;
 }
 
 #endif
