@@ -30,7 +30,7 @@
 /**
  * @brief Extends extrasampler's base adding linear extrapolation methods.
  */
-template <typename NumericType>
+template <typename NumericType, std::size_t Samples>
 class LinearExtrasampler : public Extrasampler<NumericType>
 {
 public:
@@ -42,8 +42,9 @@ public:
 private:
     NumericType a_;
     NumericType b_;
-    NumericType prev_sample_time_;
-    NumericType prev_sample_;
+    NumericType samples_buffer_[Samples];
+    NumericType times_buffer_[Samples];
+    unsigned int new_sample_index_;
 };
 
 #include "extrasampler_linear.ipp"
