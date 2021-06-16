@@ -16,7 +16,7 @@
 /* The works. */
 int main(void)
 {
-    LinearExtrasampler<double> linear();
+    LinearExtrasampler<double, 4> lin();
     QuadFixTimeExtrasampler<double> quad(0.1);
     std::cout << "It compiles!" << std::endl;
     std::cout << "Quad has tau: " << quad.get_tau() << "." << std::endl;

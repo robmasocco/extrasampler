@@ -30,7 +30,7 @@
 /**
  * @brief Extends extrasampler's base adding linear extrapolation methods.
  */
-template <typename NumericType, std::size_t Samples>
+template <typename NumericType, unsigned int Samples>
 class LinearExtrasampler : public Extrasampler<NumericType>
 {
 public:
