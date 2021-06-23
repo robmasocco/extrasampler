@@ -72,6 +72,7 @@ void LinearExtrasampler<NumericType, Samples>::update_samples(NumericType new_ti
     new_sample_index_ = (new_sample_index_ + 1) % Samples;
     if (this->samples_rcvd_ == Samples)
     {
+    /*
         // Compute new times and samples averages.
         NumericType t_avg = NumericType(0);
         NumericType s_avg = NumericType(0);
@@ -95,12 +96,42 @@ void LinearExtrasampler<NumericType, Samples>::update_samples(NumericType new_ti
         // Compute new linear extrapolation coefficients.
         b_ = Sxx / Sxy;
         a_ = s_avg - b_ * t_avg;
+    */
+    
+    	double sigmaxy = sumandmulitply(times_buffer_, samples_buffer_);
+    	double sigmaxx = sumandmultiply(times_buffer_, times_buffer_);
+    	double sigmax = sum(times_buffer_);
+    	double sigmay = sum(samples_buffer_);
+    
+    	b_ = (Samples * sigmaxy - sigmax *sigmay) / (Samples * sigmaxx - sigmax * sigmax);
+	a_ = (sigmay * sigmaxx - sigmax * sigmaxy) / (Samples * sigmaxx - sigmax * sigmax);
     }
     else
     {
         this->samples_rcvd_++;
     }
 }
+
+template <typename NumericType, unsigned int Samples>
+NumericType LinearExtrasampler<NumericType, Samples>::sum(NumericType * var)
+{
+	NumericType accumulator;
+	for(int i = 0; i < Samples; i++) {
+		accumulator += var[i];
+	}
+	return accumulator;
+}
+
+template <typename NumericType, unsigned int Samples>
+NumericType LinearExtrasampler<NumericType, Samples>::sumandmulitply(NumericType * var1, NumericType * var2)
+{
+	NumericType accumulator;
+	for(int i = 0; i < Samples; i++) {
+		accumulator += (var1[i] * var2[i]);
+	}
+	return accumulator;
+}
+
 
 /**
  * @brief Resets the internal state of the extrasampler.
